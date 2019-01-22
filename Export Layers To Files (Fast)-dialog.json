@@ -2,9 +2,17 @@ dialog {
     text: "Export Layers To Files",
     orientation: "column",
     alignChildren: "fill",
-    lblDest: StaticText {
-        alignment: "left",
-        text: "Destination:"
+    getUserName: Group {
+        orientation: "row",
+        alignChildren: "left",
+        lblUserName: StaticText {text: "Username:", preferredSize: [60, 20], helpTip: "Provide username for login in AllCanCode platform"},
+        editUserName: EditText {preferredSize: [140, 20]},
+    },
+    getAPassword: Group {
+        orientation: "row",
+        alignChildren: "left",
+        lblPassword: StaticText {text: "Password:", preferredSize: [60, 20], helpTip: "Provide password for login in AllCanCode platform"},
+        editPassword: EditText {preferredSize: [140, 20]},
     },
     funcArea: Group {
         orientation: "row",
@@ -12,9 +20,17 @@ dialog {
         content: Group {
             orientation: "column",
             alignChildren: "left",
+            grpUpload: Group {
+                orientation: "row",
+                alignChildren: "left",
+                lblUpload: StaticText {alignment: "left", preferredSize: [60, 20], text: "Upload Files:"},
+                drdUpload: DropDownList {preferredSize: [240, 20], properties: {items: ["Project_1", "Project_2"]}},
+                btnUpload: Button {text: "Upload..."}
+            },
             grpDest: Group {
                 orientation: "row",
                 alignChildren: "left",
+                lblDest: StaticText {alignment: "left", preferredSize: [60, 20], text: "Destination:"},
                 txtDest: EditText {preferredSize: [310, 20], properties: {readonly: false}},
                 btnDest: Button {text: "Browse..."}
             },
@@ -96,6 +112,7 @@ dialog {
         },
         buttons: Group {
             orientation: "column",
+            btnLogin: Button {text: "Login",  helpTip: "If you do not have any account, please visit www.allcancode.com to get one."},
             btnRun: Button {text: "Run"},
             btnCancel: Button {text: "Cancel"},
             txtSpace: StaticText {},

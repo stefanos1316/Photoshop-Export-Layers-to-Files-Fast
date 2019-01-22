@@ -261,7 +261,7 @@ function main() {
         // export
         if (foldersOk === true) {
             profiler.resetLastTime();
-
+            
             var count = exportLayers(prefs.exportLayerTarget, progressBarWindow);
             var exportDuration = profiler.getDuration(true, true);
 
