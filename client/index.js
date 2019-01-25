@@ -23,8 +23,12 @@ function validate() {
         username: username,
         password: password,
     })
-    .then(res => {
-     fillDropDown(res);
+    .end((err, res) => {
+      if(res.status != 200) {
+        alert('[Error ' + res.status + '] Authendication error');
+      } else {
+        fillDropDown(res);
+      }
     })).body;
 }
 
