@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- 1) -->
+<ExtensionManifest ExtensionBundleId="com.my.test" ExtensionBundleVersion="1.0.0" Version="7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ExtensionList>
+    <!-- 2) -->
+    <Extension Id="com.my.test.panel" Version="1.0.0" />
+  </ExtensionList>
+  <ExecutionEnvironment>
+    <HostList>
+      <!-- 3) -->
+      <Host Name="PHSP" Version="19" />
+      <Host Name="PHXS" Version="19" />
+    </HostList>
+    <LocaleList>
+      <Locale Code="All" />
+    </LocaleList>
+    <RequiredRuntimeList>
+      <RequiredRuntime Name="CSXS" Version="7.0" />
+    </RequiredRuntimeList>
+  </ExecutionEnvironment>
+  <DispatchInfoList>
+    <!-- 2) -->
+    <Extension Id="com.my.test.panel">
+      <DispatchInfo>
+        <Resources>
+          <!-- 4) -->
+          <MainPath>./client/index.html</MainPath>
+          <!-- 5) -->
+          <ScriptPath>./host/export_layers_to_files_fast.jsx</ScriptPath>
+          <ScriptPath>./host/Export_Layers_To_Files_(Fast)-dialog.json</ScriptPath> 
+          <ScriptPath>./host/Export_Layers_To_Files_(Fast)-progress_bar.json</ScriptPath>  
+          <!-- <ScriptPath>./host/test.jsx</ScriptPath>-->
+          <CEFCommandLine>
+            <Parameter>--enable-nodejs</Parameter>
+            <Parameter>--mixed-context</Parameter>
+          </CEFCommandLine>
+        </Resources>
+        <Lifecycle>
+          <AutoVisible>true</AutoVisible>
+        </Lifecycle>
+        <UI>
+          <Type>Panel</Type>
+          <!-- 6) -->
+          <Menu>Uploading exporterd images</Menu>
+          <Geometry>
+            <Size>
+              <!-- 7) -->
+              <Height>500</Height>
+              <Width>350</Width>
+            </Size>
+          </Geometry>
+          <Icons />
+        </UI>
+      </DispatchInfo>
+    </Extension>
+  </DispatchInfoList>
+</ExtensionManifest>
