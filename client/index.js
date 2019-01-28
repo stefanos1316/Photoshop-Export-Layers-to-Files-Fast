@@ -43,9 +43,9 @@ function fillDropDown(res) {
     .timeout(60000)
     .then(res => {
       var select = document.getElementById("projects");
-      var options = res.body.components;
+      var options = res.body.projects;
       for (var i = 0; i < options.length; i++) {
-        var opt = options[i].projectName;
+        var opt = options[i].name;
         var el = document.createElement("option");
         el.textContent = opt;
         el.value = opt;
@@ -60,13 +60,13 @@ var openButton = document.querySelector("#analyze");
 openButton.addEventListener("click", analyzeImage);
 
 function analyzeImage() {
-  //alert('Here and trying to analyze and still trying too');
-  var promise1 = new Promise(function(resolve, reject) {
-    setTimeout(function() {
-      csInterface.evalScript("bootstrap()");
-    }, 30);
+  csInterface.evalScript("bootstrap()", function(result){
+    uploadToServer(result);
   });
-  promise1.then(function(){
-    alert("Done here moving to transfer");
-  });
+
+}
+
+// This function is responsible to upload all the created images to the server
+function uploadToServer(result) {
+  
 }

@@ -270,7 +270,7 @@ function main() {
             if (userCancelled) {
                 message += "Export cancelled!\n\n";
             }
-            message += "Saved " + count.count + " files.";
+            message += "Saved " + count.count + " files. Please selected project to upload files.";
             if (env.profiling) {
                 message += "\n\nExport function took " + profiler.format(collectionDuration) + " + " + profiler.format(exportDuration) + " to perform.";
             }
@@ -278,6 +278,9 @@ function main() {
                 message += "\n\nSome layers failed to export! (Are there many layers with the same name?)";
             }
             alert(message, "Finished", count.error);
+
+            // If files were generated successfully the procced to upload
+            return prefs.filePath;
         }
 
         app.activeDocument.close(SaveOptions.DONOTSAVECHANGES);
@@ -2040,9 +2043,12 @@ function bootstrap() {
         // run the script itself
         if (env.cs3OrHigher) {
             // suspend history for CS3 or higher
-            app.activeDocument.suspendHistory('Export Layers To Files', 'main()');
+            //var dest = app.activeDocument.suspendHistory('Export Layers To Files', 'main()');
+            var dest = main();
+            return dest;
         } else {
-            main();
+           var dest = main();
+            return dest;
         }
 
         if (env.documentCopy) {

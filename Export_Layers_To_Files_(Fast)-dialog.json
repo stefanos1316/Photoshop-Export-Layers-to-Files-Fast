@@ -8,13 +8,6 @@ dialog {
         content: Group {
             orientation: "column",
             alignChildren: "left",
-            grpUpload: Group {
-                orientation: "row",
-                alignChildren: "left",
-                lblUpload: StaticText {alignment: "left", preferredSize: [60, 20], text: "Upload Files:"},
-                drdUpload: DropDownList {preferredSize: [240, 20], properties: {items: ["Project_1", "Project_2"]}},
-                btnUpload: Button {text: "Upload..."}
-            },
             grpDest: Group {
                 orientation: "row",
                 alignChildren: "left",
