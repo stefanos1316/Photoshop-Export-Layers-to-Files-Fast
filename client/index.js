@@ -59,7 +59,9 @@ function fillDropDown(res) {
         el.value = opt;
         select.appendChild(el);
       }
-    })).body;
+    }));
+
+    alert('Please select project to upload images.');
 }
 
 // Create a CSIneterface instance
@@ -97,30 +99,44 @@ function uploadToServer(dirPath) {
         fileNameOnly = fileNameWithExtensions[fileNameWithExtensions.length - 1].split(".");
 
         // API that creates project assets
-        var projectAsset = (agent
-          .post(url + '/api/projects/' + projectUuid + '/assets')
-          .timeout(timeout)
-          .send({
-              name: fileNameOnly[0],
-              description: fileNameOnly[0]
-          })
-          .then(res => {
-            var assetUuid = res.body.uuid;
-            var uploadFileToAsset = (agent
-              .post(url + '/api/projects/' + projectUuid + '/assets/' + assetUuid + '/file')
+        // var projectBucket = (agent
+        //   .post(url + '/api/projects/' + projectUuid + '/buckets')
+        //   .timeout(timeout)
+        //   .send({
+        //     //name: fileNameOnly[0],
+        //     //description: fileNameOnly[0]
+        //   })
+        //   .then(res => {
+            //var bucketUUid = res.body.Uuid;
+            var projectAsset = (agent
+              .post(url + '/api/projects/' + projectUuid + '/assets')
               .timeout(timeout)
-              .attach(fileNameWithExtensions[fileNameWithExtensions.length - 1], entry)
-              .field('version', '0')
-              .then(res => {
-                var test = res.body;
-              })
-              .catch(err => {
-                alert('Error in uploading: ' + err.message);
-              }));
-          })
-          .catch(err => {
-            alert('Error in creating assets: ' + err.message);
-          }));
+              .send({   
+                name: fileNameOnly[0],
+                description: fileNameOnly[0],
+                //bucketUuid: bucketUUid
+            })
+            .then(res => {
+              var assetUuid = res.body.uuid;
+              var uploadFileToAsset = (agent
+                .post(url + '/api/projects/' + projectUuid + '/assets/' + assetUuid + '/file')
+                .timeout(timeout)
+                .attach(fileNameWithExtensions[fileNameWithExtensions.length - 1], entry)
+                .field('version', '0')
+                .then(res => {
+                  var test = res.body;
+                  fs.unlink(entry, function (err) {
+                    if (err) alert('[Error File Delete] ' + err.message);
+                }); 
+                })
+                .catch(err => {
+                  alert('Error in uploading: ' + err.message);
+                }));
+            })
+            .catch(err => {
+              alert('Error in creating assets: ' + err.message);
+            }));
+      //    }));
       });
       
       alert('Files uploaded as assets in project' + projectName);   

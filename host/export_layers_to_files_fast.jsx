@@ -270,7 +270,7 @@ function main() {
             if (userCancelled) {
                 message += "Export cancelled!\n\n";
             }
-            message += "Saved " + count.count + " files. Please selected project to upload files.";
+            message += "Saved " + count.count + " files.";
             if (env.profiling) {
                 message += "\n\nExport function took " + profiler.format(collectionDuration) + " + " + profiler.format(exportDuration) + " to perform.";
             }
