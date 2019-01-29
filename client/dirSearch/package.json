@@ -1,0 +1,15 @@
+{
+  "name": "dirsearch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dirDFS.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.1",
+    "colors": "^1.3.3"
+  }
+}
