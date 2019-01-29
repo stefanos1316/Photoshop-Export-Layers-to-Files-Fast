@@ -1,3 +1,4 @@
 *.swo
 *.swp
 node_modules/*
+client/dirSearch/node_modules/*
