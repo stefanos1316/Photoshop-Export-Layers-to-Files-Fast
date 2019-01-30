@@ -298,10 +298,8 @@ function exportLayers(exportLayerTarget, progressBarWindow) {
     var doc = app.activeDocument;
 
     // Select a subset of layers to export.
-
     var layerCount = layers.length;
     var layersToExport;
-
 
     switch (exportLayerTarget) {
         case ExportLayerTarget.ALL_LAYERS:
@@ -403,11 +401,19 @@ function exportLayers(exportLayerTarget, progressBarWindow) {
         }
 
         // export layers
+        // Also append all layes bounding boxes to file name layers_bounding_box.txt
+        var filepath = '~/Downloads/layers_bounding_box.txt'; 
+        var write_file = File(filepath);
+        var out = write_file.open('a', undefined, undefined);
+        write_file.encoding = "UTF-8";
+        write_file.lineFeed = "Windows";
         for (var i = (prefs.fgLayer ? 1 : 0); i < count; ++i) {
             var layer = layersToExport[i].layer;
 
             // Ignore layers that have a bang in front, ie: "not".
             if (layer.name.indexOf(prefs.ignoreLayersString) === 0) continue;
+
+            write_file.writeln(layer.name + ' -> ' + layer.bounds);
 
             var fileName;
             switch (prefs.naming) {
@@ -489,6 +495,9 @@ function exportLayers(exportLayerTarget, progressBarWindow) {
                 }
             }
         }
+
+        // Close file
+        write_file.close();
 
         if (progressBarWindow) {
             progressBarWindow.hide();

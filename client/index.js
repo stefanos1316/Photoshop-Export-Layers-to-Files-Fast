@@ -125,9 +125,9 @@ function uploadToServer(dirPath) {
                 .field('version', '0')
                 .then(res => {
                   var test = res.body;
-                  fs.unlink(entry, function (err) {
-                    if (err) alert('[Error File Delete] ' + err.message);
-                }); 
+                //   fs.unlink(entry, function (err) {
+                //     if (err) alert('[Error File Delete] ' + err.message);
+                // }); 
                 })
                 .catch(err => {
                   alert('Error in uploading: ' + err.message);
