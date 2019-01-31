@@ -21,7 +21,7 @@
 #target photoshop
 
 app.bringToFront();
-
+app.preferences.rulerUnits = Units.PIXELS;
 //
 // Type definitions
 //
@@ -407,13 +407,16 @@ function exportLayers(exportLayerTarget, progressBarWindow) {
         var out = write_file.open('a', undefined, undefined);
         write_file.encoding = "UTF-8";
         write_file.lineFeed = "Windows";
+        write_file.writeln('{');
         for (var i = (prefs.fgLayer ? 1 : 0); i < count; ++i) {
             var layer = layersToExport[i].layer;
 
             // Ignore layers that have a bang in front, ie: "not".
             if (layer.name.indexOf(prefs.ignoreLayersString) === 0) continue;
 
-            write_file.writeln(layer.name + ' -> ' + layer.bounds);
+            // Writing each layers' bounds in a file
+            write_file.writeln('"' + layer.name + '": [' + layer.bounds[0].value + ', ' + layer.bounds[1].value
+            + ', ' + layer.bounds[2].value + ', ' + layer.bounds[3].value + '], ') ;
 
             var fileName;
             switch (prefs.naming) {
@@ -497,6 +500,7 @@ function exportLayers(exportLayerTarget, progressBarWindow) {
         }
 
         // Close file
+        write_file.writeln('}');
         write_file.close();
 
         if (progressBarWindow) {

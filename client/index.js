@@ -1,13 +1,14 @@
 const request = require('superagent');
 const dirSearch = require('C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/my_first_extension/client/dirSearch/dirDFS.js');
 const fs = require('fs');
+const lineByLine = require('n-readlines'); 
 
 var agent = request.agent();
 var url = "http://127.0.0.1:3000";
 var timeout = 60000;
 var projectsInfo;
 var projectUuid;
-var version = 1
+var version = 1;
 
 function validate() {
   var username = document.getElementById("username").value;
@@ -77,6 +78,7 @@ function analyzeImage() {
 
 // This function is responsible to upload all the created images to the server
 function uploadToServer(dirPath) {
+  const liner = new lineByLine('C:/Users/acc/Downloads/layers_bounding_box.txt');
   var projectName = document.getElementById("projects").value;
   if (projectName == "") {
     alert('No project was selected for uploading or user was not authendicated.');
@@ -98,6 +100,24 @@ function uploadToServer(dirPath) {
         fileNameWithExtensions = entry.split("\\");
         fileNameOnly = fileNameWithExtensions[fileNameWithExtensions.length - 1].split(".");
 
+        // Get bounding information for the current layer
+        // File info in array [name, x1, value, y1, value, x2, value, y2, value]
+        var splitBoundingBoxes;
+        let line;
+        var boundingBoxInfo;
+        while (line = liner.next()) {
+          splitBoundingBoxes = line.toString().split(':');
+          if (splitBoundingBoxes[0] == fileNameOnly[0]) {
+            boundingBoxInfo = {
+              x1: splitBoundingBoxes[2],
+              y1: splitBoundingBoxes[4],
+              x2: splitBoundingBoxes[6],
+              y2: splitBoundingBoxes[8]
+            };
+            break;
+          }
+        }
+
         // API that creates project assets
         // var projectBucket = (agent
         //   .post(url + '/api/projects/' + projectUuid + '/buckets')
@@ -114,6 +134,7 @@ function uploadToServer(dirPath) {
               .send({   
                 name: fileNameOnly[0],
                 description: fileNameOnly[0],
+                bounds: boundingBoxInfo
                 //bucketUuid: bucketUUid
             })
             .then(res => {
@@ -125,9 +146,9 @@ function uploadToServer(dirPath) {
                 .field('version', '0')
                 .then(res => {
                   var test = res.body;
-                //   fs.unlink(entry, function (err) {
-                //     if (err) alert('[Error File Delete] ' + err.message);
-                // }); 
+                  fs.unlink(entry, function (err) {
+                    if (err) alert('[Error File Delete] ' + err.message);
+                }); 
                 })
                 .catch(err => {
                   alert('Error in uploading: ' + err.message);
