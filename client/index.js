@@ -78,8 +78,38 @@ function analyzeImage() {
 
 // This function is responsible to upload all the created images to the server
 function uploadToServer(dirPath) {
-  const liner = new lineByLine('C:/Users/acc/Downloads/layers_bounding_box.txt');
+
+  // Get saved assets exported from Photoshop extension
+  var dataPath = "C:/Users/acc/Downloads/layers_bounding_box.txt";
+  var content=fs.readFileSync(dataPath, "utf8");
+  fs.unlink(dataPath, function (err) {
+    if (err) alert('[Error File Delete] ' + err.message);
+  });
+
+  // Making some magic to make a proper JSON string
+  content = content.toString();
+  content = content.replace(/,(?=[^,]*$)/,'');
+  var elementMap = JSON.parse(content);
+
+  // Replace white spaces and special symbols all the data read from the file
+  for (var key in elementMap) {
+    if (elementMap.hasOwnProperty(key)) {
+     var val = elementMap[key],       
+      firstRound = key.replace(/\s+/g, '_');
+      finalRound = firstRound.replace(/[&\/\\#,!+()$~%.'":*?<>{}]/g,'');
+      delete elementMap[key];
+      elementMap[finalRound] = val;
+    }
+  }
+
   var projectName = document.getElementById("projects").value;
+  // Find the project that is currently selected and get its uuid
+  for (var i = 0; i < projectsInfo.length; ++i) {
+    if(projectsInfo[i].name == projectName) {
+      projectUuid = projectsInfo[i].uuid;
+    }
+  }
+
   if (projectName == "") {
     alert('No project was selected for uploading or user was not authendicated.');
   } else {
@@ -88,35 +118,26 @@ function uploadToServer(dirPath) {
         throw err;
       }
 
-      // Find the project that is currently selected and get its uuid
-      for (var i = 0; i < projectsInfo.length; ++i) {
-        if(projectsInfo[i].name == projectName) {
-          projectUuid = projectsInfo[i].uuid;
-        }
-      }
-
       // Create project asset under the project and then uploading them
       data.forEach(function(entry) {
         fileNameWithExtensions = entry.split("\\");
         fileNameOnly = fileNameWithExtensions[fileNameWithExtensions.length - 1].split(".");
+        fileNameNoExt = fileNameOnly[0];
 
-        // Get bounding information for the current layer
-        // File info in array [name, x1, value, y1, value, x2, value, y2, value]
-        var splitBoundingBoxes;
-        let line;
-        var boundingBoxInfo;
-        while (line = liner.next()) {
-          splitBoundingBoxes = line.toString().split(':');
-          if (splitBoundingBoxes[0] == fileNameOnly[0]) {
-            boundingBoxInfo = {
-              x1: splitBoundingBoxes[2],
-              y1: splitBoundingBoxes[4],
-              x2: splitBoundingBoxes[6],
-              y2: splitBoundingBoxes[8]
-            };
-            break;
-          }
+        // Apply similar magic as we did before for the assets's file
+        fileNameNoExt = fileNameNoExt.replace(/\s+/g, '_');
+        fileNameNoExt = fileNameNoExt.replace(/[&\/\\#,!+()$~%.'":*?<>{}]/g,'');
+
+        // File info in array [name, x1, y1, x2, y2]
+        if (elementMap.hasOwnProperty(fileNameNoExt)) {
+          var boundingBoxInfo  = {
+            x1: elementMap[fileNameNoExt][0],
+            y1: elementMap[fileNameNoExt][1],
+            x2: elementMap[fileNameNoExt][2],
+            y2: elementMap[fileNameNoExt][3]
+          };
         }
+        
 
         // API that creates project assets
         // var projectBucket = (agent
