@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Upload images to AllCanCode</title>
+    <title>Upload images to Allcancode</title>
     <!-- Include CSS File Here -->
     <link rel="stylesheet" href="../css/style.css" />
     <script type="text/javascript" src="CSInterface.js"></script>
@@ -12,21 +12,23 @@
 <body>
     <div class="container">
         <div class="main">
-            <h2>Upload images to AllCanCode</h2>
+            <h2>Upload images to Allcancode</h2>
             <form id="form_id" method="post" name="myform">
                 <label>User Name :</label>
                 <input type="text" name="username" id="username" />
                 <label>Password :</label>
                 <input type="password" name="password" id="password" />
                 <input type="button" value="Login" id="submit" onclick="validate()" />
-                <select name="projects" id="projects">
-                    
-                </select>
+                
             </form>
         </div>
     </div>
     <div class="main">
         <form id="form_id" method="post" name="myform">
+            <label for="projects">Select project :</label>
+            <select style="margin-bottom:15px;" name="projects" id="projects">
+                
+            </select>
             <input type="button" value="Analyze" id="analyze" onclick="analyzeImage()" />
     </form>
     </div>

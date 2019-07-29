@@ -76,6 +76,15 @@ function analyzeImage() {
     });
 }
 
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
 // This function is responsible to upload all the created images to the server
 function uploadToServer(dirPath) {
 
@@ -138,7 +147,7 @@ function uploadToServer(dirPath) {
           };
         }
         
-
+        
         // API that creates project assets
         // var projectBucket = (agent
         //   .post(url + '/api/projects/' + projectUuid + '/buckets')
@@ -149,6 +158,7 @@ function uploadToServer(dirPath) {
         //   })
         //   .then(res => {
             //var bucketUUid = res.body.Uuid;
+            //sleep(1000);
             var projectAsset = (agent
               .post(url + '/api/projects/' + projectUuid + '/assets')
               .timeout(timeout)
