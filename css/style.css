@@ -1,11 +1,13 @@
 /* Below line is used for online Google font */
 @import url(http://fonts.googleapis.com/css?family=Raleway);
+
+body { background-color: #464646; }
 h2{
-display:inline-block;
-padding: 20px 25px;
-margin: -10px -10px;
+display: bloxk;
+margin: 5px auto 15px;
 text-align:center;
-border-radius: 10px 10px 0 0;
+color: #fff;
+font-size: 15px;
 }
 hr{
 margin: 10px 10px;
@@ -14,52 +16,39 @@ border-top: 1px solid #ccc;
 margin-bottom: 10px;
 }
 div.container{
-width: 240px;
-height: 280px;
-margin:35px auto;
+margin: 35px auto;
 font-family: 'Raleway', sans-serif;
 }
 div.main{
-width: 200px;
+width: 90%;
 padding: 10px;
-margin: auto;
-border: 2px solid gray;
-border-radius: 10px;
+box-sizing: border-box;
+margin-left: auto;
+margin-right: auto;
+border: 1px solid gray;
+border-radius: 4px;
 font-family: raleway;
-float:left
 }
-input[type=text],input[type=password]{
+input[type=text],input[type=password],select{
+display: block;
 width: 100%;
-height: 40px;
-padding: 5px;
-margin-bottom: 25px;
-margin-top: 5px;
-border: 2px solid #ccc;
+padding: 7px;
+box-sizing: border-box;
+margin: 5px 0 20px;
+border: 1px solid #ccc;
 color: #4f4f4f;
 font-size: 16px;
-border-radius: 5px;
+line-height: 1.3;
+border-radius: 4px;
 }
 label{
-color: #464646;
-text-shadow: 0 1px 0 #fff;
+color: #fff;
 font-size: 14px;
 font-weight: bold;
 }
-select{
-    color: #464646;
-    text-shadow: 0 1px 0 #fff;
-    font-size: 14px;
-    font-weight: bold;
-    }
-center{
-font-size:32px;
-}
-.note{
-color:red;
-}
-.valid{
-color:green;
-}
+center{ font-size:32px; }
+.note{ color:red; }
+.valid{ color:green; }
 .back{
 text-decoration: none;
 border: 1px solid rgb(0, 143, 255);
@@ -83,3 +72,5 @@ outline:none;
 input[type=button]:hover{
 background: linear-gradient(#ffdd7f 5%, #ffbc00 100%);
 }
+
+input[type=button] + select { margin-top: 20px; }
