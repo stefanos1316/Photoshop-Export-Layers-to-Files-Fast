@@ -1,12 +1,14 @@
 const request = require('superagent');
 const dirSearch = require('C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/my_first_extension/client/dirSearch/dirDFS.js');
 const fs = require('fs');
+const path = require('path');
+var zipFolder = require('zip-folder');
 const agent = request.agent();
 const url = "http://127.0.0.1:3000";
 const timeout = 60000;
 var projectsInfo;
 var projectUuid;
-var version = 1;
+var version = '0';
 
 function validate() {
   var username = document.getElementById("username").value;
@@ -28,8 +30,8 @@ function validate() {
       password: password,
     })
     .end((err, res) => {
-      if (res.status != 200) {
-        alert('[Error ' + res.status + '] Authendication error');
+      if (err) {
+        alert('[Error] ' + err);
       } else {
         fillDropDown(res);
       }
@@ -57,7 +59,7 @@ function fillDropDown(res) {
         el.value = opt;
         select.appendChild(el);
       }
-    }));
+    })).body;
 
     alert('Please select project to upload images.');
 }
@@ -69,17 +71,54 @@ openButton.addEventListener("click", analyzeImage);
 
 function analyzeImage() {
     csInterface.evalScript("bootstrap()", function (result) {
-      uploadToServer(result);
+      //uploadToServer(result);
+      uploadZipFile(result);
     });
 }
 
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
+// Function to upload zip file on server
+function uploadZipFile(dirPath) {
+  var projectName = document.getElementById("projects").value;
+  // Find the project that is currently selected and get its uuid
+  for (var i = 0; i < projectsInfo.length; ++i) {
+    if(projectsInfo[i].name == projectName) {
+      projectUuid = projectsInfo[i].uuid;
     }
   }
+
+  if (projectName == "") {
+    alert('No project was selected for uploading or user was not authendicated.');
+  } else {
+  var zipFile = dirPath + '.zip'
+  zipFolder(dirPath, zipFile, function(err) {
+    if (err) {
+      alert('[Error in zipping] ' + err);
+      return ;
+    } else {
+      var createZipAsset = (agent
+        .post(url + '/api/projects/' + projectUuid + '/assets')
+        .timeout(timeout)
+        .query({
+          version: version
+        })
+        .send({
+          name: zipFile,
+          description: 'photoshop'
+        })
+        .then(asset => {
+          alert('Asseet ' + asset.body.uuid + ' was created');
+          agent
+            .post(url + '/api/projects/' + projectUuid + '/assets/' + asset.body.uuid + '/file')
+            .timeout(timeout)
+            .attach('photoshop.zip', zipFile)
+            .field(version, version)
+            .then(res => {
+              alert('Uploaded!!!');
+            }).body;
+        })).body;
+    }
+  })
+}
 }
 
 // This function is responsible to upload all the created images to the server
@@ -144,19 +183,7 @@ function uploadToServer(dirPath) {
           };
         }
         
-        
-        // API that creates project assets
-        // var projectBucket = (agent
-        //   .post(url + '/api/projects/' + projectUuid + '/buckets')
-        //   .timeout(timeout)
-        //   .send({
-        //     //name: fileNameOnly[0],
-        //     //description: fileNameOnly[0]
-        //   })
-        //   .then(res => {
-            //var bucketUUid = res.body.Uuid;
-            //sleep(1000);
-            var projectAsset = (agent
+        var projectAsset = (agent
               .post(url + '/api/projects/' + projectUuid + '/assets')
               .timeout(timeout)
               .send({   
