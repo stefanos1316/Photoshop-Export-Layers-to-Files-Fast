@@ -1,11 +1,9 @@
 const request = require('superagent');
 const dirSearch = require('C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/my_first_extension/client/dirSearch/dirDFS.js');
 const fs = require('fs');
-const lineByLine = require('n-readlines'); 
-
-var agent = request.agent();
-var url = "http://127.0.0.1:3000";
-var timeout = 60000;
+const agent = request.agent();
+const url = "http://127.0.0.1:3000";
+const timeout = 60000;
 var projectsInfo;
 var projectUuid;
 var version = 1;
@@ -18,8 +16,7 @@ function validate() {
     alert('Error: Username or password was not provided');
     return false;
   }
-
-  var userInfo;
+  
   var user = (agent
     .post(url + '/auth/allcancode')
     .query({

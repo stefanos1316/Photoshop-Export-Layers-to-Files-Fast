@@ -10,6 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "fs": "0.0.1-security",
-    "superagent": "^4.1.0"
+    "node-zip": "^1.1.1",
+    "request": "^2.88.0",
+    "superagent": "4.1.0",
+    "zip-folder": "^1.0.0"
   }
 }
